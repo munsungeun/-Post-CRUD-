@@ -1,6 +1,6 @@
 "use client";
 
-import useApi from "@/api/useApi";
+import api from "@/api/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -18,7 +18,6 @@ type Post = {
 const PostList = () => {
   const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
-  const api = useApi();
   const [editingId, setEditingId] = useState<number | null>(null);
 
   useEffect(() => {

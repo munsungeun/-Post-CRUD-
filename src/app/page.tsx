@@ -6,7 +6,7 @@ interface LoginResponse {
 import { useEffect, useState } from "react";
 import PostList from "./list/page";
 import { useRouter } from "next/navigation";
-import useApi from "@/api/useApi";
+import api from "@/api/api";
 
 const Login = () => {
   const [name, setName] = useState("");
@@ -14,7 +14,6 @@ const Login = () => {
   const [signUp, setSignUp] = useState(false);
   const router = useRouter();
   const [token, setToken] = useState("");
-  const api = useApi();
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50">

@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import useApi from "@/api/useApi";
+import api from "@/api/api";
 
 const PostCreate = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const router = useRouter();
-  const api = useApi();
 
   return (
     <main className="min-h-screen bg-[#f8f9fa]">

@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import useApi from "@/api/useApi";
+import api from "@/api/api";
 
 const PostList = () => {
   const router = useRouter();
-  const api = useApi();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
