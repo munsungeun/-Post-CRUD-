@@ -22,48 +22,72 @@ const PostList = () => {
   const [retouch, setRetouch] = useState<number | null>(null);
   const [admin, setAdmin] = useState(false);
 
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  const [username, setUsername] = useState("");
+
   useEffect(() => {
     const adminCheck = localStorage.getItem("admin");
+    const usernameCheck = localStorage.getItem("username");
 
     if (adminCheck === "true") {
       setAdmin(true);
+    }
+
+    if (usernameCheck) {
+      setUsername(usernameCheck);
     }
   }, []);
 
   useEffect(() => {
     const getPost = async () => {
-      const response = await api.get("/posts");
-      setPosts(response.data);
+      try {
+        const response = await api.get("/posts");
+        setPosts(response.data);
+      } catch (error) {
+        console.error("게시글을 가져오는데 실패했습니다.", error);
+      }
     };
 
     getPost();
   }, []);
 
   const Delete = async (id: number) => {
-    await api.delete(`/posts/${id}`);
+    try {
+      await api.delete(`/posts/${id}`);
 
-    setPosts(posts.filter((post) => post.id !== id));
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+    } catch (error) {
+      console.error("게시글 삭제에 실패했습니다.", error);
+    }
   };
 
   const Edit = async (id: number) => {
-    await api.put(`/posts/${id}`, {
-      title: title,
-      content: content,
-    });
+    try {
+      await api.put(`/posts/${id}`, {
+        title: title,
+        content: content,
+      });
 
-    setPosts(
-      posts.map((post) =>
-        post.id === id
-          ? {
-              ...post,
-              title: title,
-              content: content,
-            }
-          : post,
-      ),
-    );
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === id
+            ? {
+                ...post,
+                title: title,
+                content: content,
+              }
+            : post,
+        ),
+      );
 
-    setRetouch(null);
+      setRetouch(null);
+      setTitle("");
+      setContent("");
+    } catch (error) {
+      console.error("게시글 수정에 실패했습니다.", error);
+    }
   };
 
   const startEdit = (post: Post) => {
@@ -74,7 +98,6 @@ const PostList = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-gray-900">
-      {/* Header */}
       <header className="border-b border-gray-200 bg-white">
         <div className="mx-auto flex h-16 max-w-[1040px] items-center justify-between px-5">
           <div className="text-lg font-bold tracking-tight">게시판 관리</div>
@@ -102,9 +125,7 @@ const PostList = () => {
         </div>
       </header>
 
-      {/* Main */}
       <main className="mx-auto w-full max-w-[1040px] px-5 py-10">
-        {/* Title */}
         <div className="mb-7 flex items-end justify-between">
           <div>
             <div className="text-3xl font-bold tracking-tight">게시글 목록</div>
@@ -119,7 +140,6 @@ const PostList = () => {
           </button>
         </div>
 
-        {/* Table */}
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
           <div className="grid grid-cols-[2fr_1.2fr_1fr_140px] items-center border-b border-gray-200 bg-gray-50 px-5 py-3.5 text-xs font-semibold text-gray-500">
             <div>제목</div>
@@ -130,7 +150,6 @@ const PostList = () => {
 
           <div>
             {posts.map((post) => {
-              const username = localStorage.getItem("username");
               const canEdit = admin || post.author.username === username;
 
               return (
@@ -171,7 +190,11 @@ const PostList = () => {
 
                         <button
                           type="button"
-                          onClick={() => setRetouch(null)}
+                          onClick={() => {
+                            setRetouch(null);
+                            setTitle("");
+                            setContent("");
+                          }}
                           className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-gray-600 transition hover:bg-gray-100"
                         >
                           취소
@@ -188,7 +211,7 @@ const PostList = () => {
                         {post.author.username}
                       </div>
 
-                      <div className="text-sm text-gray-400 pl-3.5">-</div>
+                      <div className="pl-3.5 text-sm text-gray-400">-</div>
 
                       <div className="flex justify-center gap-2">
                         {canEdit && (
@@ -222,6 +245,7 @@ const PostList = () => {
                 <div className="text-sm font-medium text-gray-500">
                   게시글이 없습니다.
                 </div>
+
                 <div className="mt-1 text-xs text-gray-400">
                   새 게시글을 작성해보세요.
                 </div>
