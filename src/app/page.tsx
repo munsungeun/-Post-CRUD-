@@ -59,9 +59,15 @@ const Login = () => {
                   username: name,
                   password: passWord,
                 });
-
                 setToken(data.token);
                 localStorage.setItem("api", data.token);
+                localStorage.setItem("username", name);
+
+                if (name === "admin") {
+                  localStorage.setItem("admin", "true");
+                } else {
+                  localStorage.removeItem("admin");
+                }
                 router.replace("/list");
               } else {
                 await api.post("/sign-up", {

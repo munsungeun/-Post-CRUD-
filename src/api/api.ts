@@ -10,7 +10,7 @@ api.interceptors.request.use((config) => {
   // Next.js는 서버/클라이언트 모두 호출 가능하기 때문에 클라이언트에서만 호출하도록 감지하는 코드임
   if (typeof window === "undefined") return config;
 
-  // 누가봐도 당연히 알겠지만 localStorage에서 저장한 토큰 가져옴 ㅋ
+  // 누가봐도 당연히 알겠지만 localStorage에서 저장한 토큰 가져옴
   const token = localStorage.getItem("api");
   if (!token) return config; // 토큰 없으면 그냥 기본 값 사용
 
