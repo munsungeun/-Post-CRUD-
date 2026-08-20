@@ -15,7 +15,6 @@ const PostList = () => {
   };
 
   const save = async () => {
-    console.log("1. save 함수 시작됨!");
     if (!title.trim() || !content.trim()) {
       alert("제목과 내용을 모두 입력해 주세요.");
       return;

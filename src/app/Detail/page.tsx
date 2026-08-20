@@ -42,7 +42,6 @@ const PostDetail = () => {
   return (
     <main className="min-h-screen bg-gray-50/50 py-10 sm:py-14">
       <div className="mx-auto w-full max-w-4xl px-5 sm:px-8">
-        {/* 상단 버튼 영역 */}
         <div className="mb-6 flex items-center justify-between">
           <button
             type="button"
